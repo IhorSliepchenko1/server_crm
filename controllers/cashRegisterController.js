@@ -7,15 +7,19 @@ class CashRegisterController {
     const { id } = req.user
 
     try {
-      if (cash < 0 || cashless < 0 || !date) {
-        next(ApiError.notFound(`Заполните все поля!`));
+      if (cash < 0 || cashless < 0) {
+        return next(ApiError.notFound(`Значения не могу быть меньше нуля!`));
       }
 
-      const checkDudleDate = await CashRegister.findOne({ where: { date: `${date}T00:00:00.000Z` } })
+      if (!cash || !cashless || !date) {
+        return next(ApiError.notFound(`Заполние все поля!`));
+      }
+
+
+      const checkDudleDate = await CashRegister.findOne({ where: { date } })
 
       if (checkDudleDate) {
-        next(ApiError.badRequest(`За эту дату касса внесена!`));
-        return
+        return next(ApiError.badRequest(`За эту дату касса внесена!`));
       }
 
       const totalCash = +cash + (+cashless - (+cashless / 100) * 1.3);
@@ -30,7 +34,7 @@ class CashRegisterController {
 
       return res.status(200).json(cashRegister);
     } catch (error) {
-      next(ApiError.internal(error.message));
+      return next(ApiError.internal(error.message));
     }
   }
   async getAllPagination(req, res, next) {
@@ -50,7 +54,7 @@ class CashRegisterController {
 
       return res.status(200).json(data);
     } catch (error) {
-      next(ApiError.internal(error.message));
+      return next(ApiError.internal(error.message));
     }
   }
 
@@ -73,7 +77,7 @@ class CashRegisterController {
 
       return res.status(200).json(cashRegisterUpdate);
     } catch (error) {
-      next(ApiError.internal(error.message));
+      return next(ApiError.internal(error.message));
     }
   }
   async delete(req, res, next) {
@@ -93,7 +97,7 @@ class CashRegisterController {
 
       return res.status(200).json(`id: ${id} удалён `);
     } catch (error) {
-      next(ApiError.internal(error.message));
+      return next(ApiError.internal(error.message));
     }
   }
 }

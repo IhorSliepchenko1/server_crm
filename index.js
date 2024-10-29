@@ -1,7 +1,7 @@
 require(`dotenv`).config();
 
 const express = require(`express`);
-const sequilize = require(`./db.js`);
+const sequelize = require(`./db.js`);
 require(`./models/models.js`);
 const cors = require(`cors`);
 const bodyParser = require(`body-parser`);
@@ -36,8 +36,8 @@ app.use((err, req, res, next) => {
 
 const start = async () => {
   try {
-    await sequilize.authenticate();
-    await sequilize.sync();
+    await sequelize.authenticate();
+    await sequelize.sync({ alter: true });
 
     app.listen(PORT, () => {
       console.log(`**сервер запущен на порту ${PORT}**`);

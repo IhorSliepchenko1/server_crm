@@ -38,7 +38,7 @@ class ExpensesController {
 
                return res.status(200).json(expenses);
           } catch (error) {
-               next(ApiError.internal(error.message));
+               return next(ApiError.internal(error.message));
           }
      }
      async getAll(req, res, next) {
@@ -49,27 +49,28 @@ class ExpensesController {
                let offset = page * limit - limit;
 
                const data = await Expenses.findAndCountAll({
-                    page,
                     limit,
                     offset,
                     order: [['date', 'DESC']],
+                    include: [
+                         { model: User, as: 'user', attributes: ['login'] },
+                         { model: TypesExpenses, as: 'typeExpense', attributes: ['name'] }
+                    ]
                });
 
-               const copyData = { ...data }
-               const arrayResult = { count: copyData.count, rows: [] }
-               for (let i = 0; i < copyData.rows.length; i++) {
-                    const userName = await User.findOne({ where: { id: data.rows[i].userId } });
-                    const typeExpenses = await TypesExpenses.findOne({ where: { id: data.rows[i].typesExpenseId } })
-                    const login = userName ? userName.login : 'Неизвестный';
-                    const type = typeExpenses ? typeExpenses.name : 'Без типа';
-                    arrayResult.rows.push({ ...copyData.rows[i].dataValues, userName: login, typeName: type });
-
-               }
+               const arrayResult = {
+                    count: data.count,
+                    rows: data.rows.map(expense => ({
+                         ...expense.dataValues,
+                         userName: expense.user ? expense.user.login : 'Неизвестный',
+                         typeName: expense.typeExpense ? expense.typeExpense.name : 'Без типа'
+                    }))
+               };
 
 
                return res.status(200).json(arrayResult);
           } catch (error) {
-               next(ApiError.internal(error.message));
+               return next(ApiError.internal(error.message));
           }
      }
      async edit(req, res, next) {
@@ -106,7 +107,7 @@ class ExpensesController {
 
                return res.status(200).json(expensesUpdate);
           } catch (error) {
-               next(ApiError.internal(error.message));
+               return next(ApiError.internal(error.message));
           }
      }
      async delete(req, res, next) {
@@ -125,7 +126,7 @@ class ExpensesController {
 
                return res.status(200).json(`id: ${id} удалён `);
           } catch (error) {
-               next(ApiError.internal(error.message));
+               return next(ApiError.internal(error.message));
           }
      }
 }

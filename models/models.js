@@ -15,7 +15,7 @@ const CashRegister = sequilize.define(`cash_register`, {
   cash: { type: DataTypes.DECIMAL(10, 2), allowNull: false },
   cashless: { type: DataTypes.DECIMAL(10, 2), allowNull: false },
   totalCash: { type: DataTypes.DECIMAL(10, 2), allowNull: false },
-  date: { type: DataTypes.DATE, allowNull: false },
+  date: { type: DataTypes.DATEONLY, allowNull: false },
 });
 
 // TypesExpenses
@@ -27,7 +27,7 @@ const TypesExpenses = sequilize.define(`types_expenses`, {
 const Expenses = sequilize.define(`expenses`, {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   name: { type: DataTypes.STRING, allowNull: false },
-  date: { type: DataTypes.DATE, allowNull: false },
+  date: { type: DataTypes.DATEONLY, allowNull: false },
   sum: { type: DataTypes.DECIMAL(10, 2), allowNull: false },
   img: { type: DataTypes.STRING, allowNull: true },
 });
@@ -35,11 +35,12 @@ const Expenses = sequilize.define(`expenses`, {
 User.hasMany(CashRegister);
 CashRegister.belongsTo(User);
 
-User.hasMany(Expenses);
-Expenses.belongsTo(User);
+User.hasMany(Expenses, { foreignKey: 'userId' });
+Expenses.belongsTo(User, { as: 'user', foreignKey: 'userId' });
 
-TypesExpenses.hasMany(Expenses);
-Expenses.belongsTo(TypesExpenses);
+TypesExpenses.hasMany(Expenses, { foreignKey: 'typesExpenseId' });
+Expenses.belongsTo(TypesExpenses, { as: 'typeExpense', foreignKey: 'typesExpenseId' });
+
 
 module.exports = {
   User,

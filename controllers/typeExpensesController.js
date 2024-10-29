@@ -15,7 +15,7 @@ class TypesExpensesController {
                return res.json(typeExpense);
           }
           catch (error) {
-               next(ApiError.internal(error.message));
+               return next(ApiError.internal(error.message));
           }
      }
      async getAll(req, res, next) {
@@ -24,7 +24,7 @@ class TypesExpensesController {
                res.json(typesExpenses);
           }
           catch (error) {
-               next(ApiError.internal(error.message));
+               return next(ApiError.internal(error.message));
           }
      }
      async edit(req, res, next) {
@@ -38,7 +38,7 @@ class TypesExpensesController {
                return res.status(200).json(`Вы сменили название категории расходов`);
 
           } catch (error) {
-               next(ApiError.internal(error.message));
+               return next(ApiError.internal(error.message));
           }
      }
      async delete(req, res, next) {
@@ -48,7 +48,7 @@ class TypesExpensesController {
                const delId = await TypesExpenses.findOne({ where: { id } })
 
                if (!delId) {
-                    next(ApiError.notFound(`id в базе отсутствует или ранее был удалён!`));
+                    return next(ApiError.notFound(`id в базе отсутствует или ранее был удалён!`));
                }
 
 
@@ -57,7 +57,7 @@ class TypesExpensesController {
                return res.status(200).json(`Категория удалена`);
 
           } catch (error) {
-               next(ApiError.internal(error.message));
+               return next(ApiError.internal(error.message));
           }
      }
 }

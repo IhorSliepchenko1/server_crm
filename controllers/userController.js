@@ -55,7 +55,7 @@ class UserController {
       const comparePassword = bcrypt.compareSync(password, user.password);
 
       if (!comparePassword) {
-        next(ApiError.unauthorized(`Указан неверный пароль`));
+        next(ApiError.unauthorized(`Указан неверный логин или пароль`));
       }
 
       const token = generateJwt(user.id, user.login, user.role);
@@ -81,28 +81,41 @@ class UserController {
 
   async updateUser(req, res, next) {
     const { id } = req.params;
-    const { login, password, role } = req.body;
+    const { login, newPassword, oldPassword, role } = req.body;
+    console.log(newPassword, oldPassword);
 
     try {
 
       const user = await User.findOne({ where: { id } });
 
       if (!user) {
-        next(ApiError.badRequest(`${id} не найден`));
+        return next(ApiError.badRequest(`${id} не найден`));
       }
 
-      if (password) {
-        if (password.length < 6) {
-          next(ApiError.badRequest(`Пароль должен быть не менее 6 символов`));
+      let isMatch
+
+      if (oldPassword) {
+        isMatch = bcrypt.compareSync(oldPassword, user.password);
+
+        if (!isMatch) {
+          return next(ApiError.badRequest(`Старый пароль не совпадает`));
         }
       }
 
-      const hashPassword = await bcrypt.hash(password, 12);
+
+
+      if (newPassword) {
+        if (newPassword.length < 6) {
+          return next(ApiError.badRequest(`Пароль должен быть не менее 6 символов`));
+        }
+      }
+
+      const hashPassword = newPassword ? await bcrypt.hash(newPassword, 12) : undefined
 
       await User.update(
         {
           login: login || undefined,
-          password: hashPassword || undefined,
+          password: hashPassword,
           role: role || undefined
         },
         { where: { id } }

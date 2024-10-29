@@ -9,7 +9,7 @@ router.post(`/registration`, checkRoleMiddleware(`ADMIN`), userController.regist
 router.post(`/login`, userController.login);
 router.get(`/check`, authMiddleware, userController.check);
 router.get(`/`, authMiddleware, userController.getAll);
-router.put(`/:id`, checkRoleMiddleware(`ADMIN`), userController.updateUser);
+router.put(`/:id`, authMiddleware, userController.updateUser);
 router.delete(`/:id`, checkRoleMiddleware(`ADMIN`), userController.delete);
 
 module.exports = router;

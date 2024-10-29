@@ -27,7 +27,7 @@ class Balance {
                return res.status(200).json({ totalCash, totalExpenses, balance: totalCash - totalExpenses });
           }
           catch (error) {
-               next(ApiError.internal(error.message));
+               return next(ApiError.internal(error.message));
           }
      }
 

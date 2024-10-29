@@ -1,10 +1,11 @@
 version: "1.0"
 
 services:
+
   web:
     image: server
     container_name: server_api
-    build: . # Adjust as needed if your Dockerfile is not in the root
+    build: .
     ports:
       - "5000:5000"
     restart: always
@@ -24,16 +25,16 @@ services:
       - "5432:5432"
     volumes:
       - db:/var/lib/postgresql/data
+
     environment:
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=${DB_NAME}
 
   react-app:
-    # React application service
     build:
-      context: ../front # Path to your React application relative to the root of your project
+      context: ../front
     ports:
-      - "80:80" # Port on which your React application will be available
+      - "80:80"
 
 volumes:
-  db: {} # This volume will store PostgreSQL data
+  db: {}
