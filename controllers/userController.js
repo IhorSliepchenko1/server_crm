@@ -82,7 +82,6 @@ class UserController {
   async updateUser(req, res, next) {
     const { id } = req.params;
     const { login, newPassword, oldPassword, role } = req.body;
-    console.log(newPassword, oldPassword);
 
     try {
 
