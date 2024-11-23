@@ -6,6 +6,7 @@ const checkRoleMiddleware = require(`../middleware/checkRoleMiddleware`);
 
 router.post(`/deposit`, authMiddleware, expensesController.deposit);
 router.get(`/`, expensesController.getAll);
+router.get(`/download-all`, expensesController.downloadFile);
 // +
 router.put(`/:id`, authMiddleware, expensesController.edit);
 router.delete(`/:id`, checkRoleMiddleware(`ADMIN`), expensesController.delete);

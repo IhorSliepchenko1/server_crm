@@ -12,7 +12,7 @@ const generateJwt = (id, login, role) => {
 class UserController {
   async registration(req, res, next) {
     try {
-      const { login, password, role } = req.body;
+      const { login, password, role } = req.body;      
 
       if (!login || !password) {
         next(ApiError.notFound(`Логин и пароль обязательны!`));
