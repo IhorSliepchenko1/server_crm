@@ -42,14 +42,14 @@ class BalanceController {
      async edit(req, res, next) {
           const balance = await Balance.findAll()
           const { id } = balance[0]
-          const { cash, cashless } = req.body;
+          const { cash, cashless, totalCash } = req.body;
 
           try {
                if (!cash || !cashless) {
                     return next(ApiError.notFound(`Заполние все поля!`));
                }
 
-               const totalCash = parseFloat(cash) + parseFloat(cashless)
+               // const totalCash = parseFloat(cash) + parseFloat(cashless)
 
                const balanceUpdate = await Balance.update(
                     {
