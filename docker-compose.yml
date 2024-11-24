@@ -1,16 +1,12 @@
-version: "1.0"
-
+version: '3.8'
 services:
-
-  web:
-    image: server
-    container_name: server_api
+  server:
     build: .
     ports:
-      - "5000:5000"
-    restart: always
+      - "5000:${PORT}"
     depends_on:
       - db
+      - front
     environment:
       - DB_HOST=host.docker.internal
       - DB_PORT=${DB_PORT}
@@ -24,17 +20,16 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - db:/var/lib/postgresql/data
-
+      - db:/data/db
     environment:
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
-      - POSTGRES_DB=${DB_NAME}
+      POSTGRES_DB: crm
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: rootroot
 
-  react-app:
-    build:
-      context: ../front
+  front:
+    build: ../front
     ports:
       - "80:80"
 
 volumes:
-  db: {}
+  db:

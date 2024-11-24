@@ -3,10 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "npm run build:front && concurrently \"npm run serve:front\" \"npm run dev\"",
-    "dev": "nodemon index.js",
-    "build:front": "cd ../front && npm run build",
-    "serve:front": "cd ../front/dist && npm run dev"
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
   "author": "",
   "license": "ISC",
