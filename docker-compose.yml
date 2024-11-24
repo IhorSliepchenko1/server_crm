@@ -8,7 +8,7 @@ services:
       - db
       - front
     environment:
-      - DB_HOST=host.docker.internal
+      - DB_HOST=${DB_HOST}
       - DB_PORT=${DB_PORT}
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
@@ -26,14 +26,14 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: rootroot
 
-front:
-  build:
-    context: ../front_crm
-    dockerfile: Dockerfile
-  ports:
-    - "80:80"
-  environment:
-    - NODE_OPTIONS=--max-old-space-size=4096
+  front:
+    build:
+      context: ../front_crm
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    environment:
+      - NODE_OPTIONS=--max-old-space-size=4096
 
 volumes:
   db:
