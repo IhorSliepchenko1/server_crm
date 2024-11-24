@@ -27,7 +27,7 @@ services:
       POSTGRES_PASSWORD: rootroot
 
   front:
-    build: ../front
+    build: ../front_crm
     ports:
       - "80:80"
 
