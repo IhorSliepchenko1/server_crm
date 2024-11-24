@@ -26,10 +26,14 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: rootroot
 
-  front:
-    build: ../front_crm
-    ports:
-      - "80:80"
+front:
+  build:
+    context: ../front_crm
+    dockerfile: Dockerfile
+  ports:
+    - "80:80"
+  environment:
+    - NODE_OPTIONS=--max-old-space-size=4096
 
 volumes:
   db:
