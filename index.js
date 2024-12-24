@@ -13,7 +13,7 @@ const ApiError = require(`./error/ApiError.js`);
 
 const PORT = process.env.PORT || 5000;
 const app = express();
-const staticDir = path.resolve(__dirname, `static`)
+const staticDir = path.resolve(__dirname, `static`);
 
 if (!fs.existsSync(staticDir)) {
   fs.mkdirSync(staticDir);
@@ -31,13 +31,13 @@ app.use((err, req, res, next) => {
     return res.status(err.status).json({ message: err.message });
   }
 
-  return res.status(500).json({ message: 'Что-то пошло не так' });
+  return res.status(500).json({ message: "Что-то пошло не так" });
 });
 
 const start = async () => {
   try {
     await sequelize.authenticate();
-    // await sequelize.sync();
+    await sequelize.sync({ alter: true });
 
     app.listen(PORT, () => {
       console.log(`**сервер запущен на порту ${PORT}**`);

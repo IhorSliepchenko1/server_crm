@@ -8,8 +8,8 @@ services:
       - db
       - front
     environment:
-      - DB_HOST=${DB_HOST}
-      - DB_PORT=${DB_PORT}
+      - DB_HOST=db
+      - DB_PORT=5432
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_NAME=${DB_NAME}
@@ -20,7 +20,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - db:/data/db
+      - db:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
@@ -33,7 +33,7 @@ services:
     ports:
       - "80:80"
     environment:
-      - NODE_OPTIONS=--max-old-space-size=4096
+      - NODE_OPTIONS=--max-old-space-size=8192
 
 volumes:
   db:
